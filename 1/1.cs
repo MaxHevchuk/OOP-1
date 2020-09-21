@@ -6,7 +6,8 @@ namespace _1
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            Console.OutputEncoding = System.Text.Encoding.Unicode;
+            Console.WriteLine("Привіт, ДонНУ!");
         }
     }
 }
