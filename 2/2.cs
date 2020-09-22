@@ -11,14 +11,19 @@ namespace _2
 
             Console.Write("Введите имя: ");
             string name = Console.ReadLine();
+
             Console.Write("Введите возраст: ");
             int age = Convert.ToInt32(Console.ReadLine());
+
             Console.Write("Введите вес: ");
             float weight = Convert.ToSingle(Console.ReadLine());
+
             Console.Write("Введите рост: ");
             double height = Convert.ToDouble(Console.ReadLine());
+
             Console.Write("Вы женаты? true or false: ");
             bool isMarried = Convert.ToBoolean(Console.ReadLine());
+
             Console.Write("Введите дату: ");
             object obj = Convert.ToDateTime(Console.ReadLine());
 
@@ -28,10 +33,6 @@ namespace _2
                 $"Рост: {height}\n" +
                 $"Женаты: {isMarried}\n" +
                 $"Дата: {obj}");
-
-
-
-
         }
     }
 }
