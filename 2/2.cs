@@ -9,29 +9,75 @@ namespace _2
             Console.InputEncoding = System.Text.Encoding.Unicode;
             Console.OutputEncoding = System.Text.Encoding.Unicode;
 
-            Console.Write("Введите имя: ");
-            string name = Console.ReadLine();
+            int age = 0;
+            float weight =0.0f;
+            double height = 0.0;
+            bool isStudent = true;
+            object obj = "";
 
+            Console.Write("Введите имя: ");
+            string name = Console.ReadLine();            
+                 
             Console.Write("Введите возраст: ");
-            int age = Convert.ToInt32(Console.ReadLine());
+            try
+            {
+                age = Convert.ToInt32(Console.ReadLine());
+            }
+            catch (System.FormatException)
+            {
+                Console.WriteLine("Вы ввели неправильный тип.");
+            }
+            
 
             Console.Write("Введите вес: ");
-            float weight = Convert.ToSingle(Console.ReadLine());
+            try
+            {
+                weight = Convert.ToSingle(Console.ReadLine());
+            }
+            catch (System.FormatException)
+            {
+                Console.WriteLine("Вы ввели неправильный тип.");
+            }
+            
 
             Console.Write("Введите рост: ");
-            double height = Convert.ToDouble(Console.ReadLine());
+            try
+            {
+                height = Convert.ToDouble(Console.ReadLine());
+            }
+            catch (System.FormatException)
+            {
+                Console.WriteLine("Вы ввели неправильный тип.");
+            }
+            
 
-            Console.Write("Вы женаты? true or false: ");
-            bool isMarried = Convert.ToBoolean(Console.ReadLine());
+            Console.Write("Вы студент? true or false: ");
+            try
+            {
+                isStudent = Convert.ToBoolean(Console.ReadLine());
+            }
+            catch (System.FormatException)
+            {
+                Console.WriteLine("Вы ввели неправильный тип.");
+            }
+            
 
             Console.Write("Введите дату: ");
-            object obj = Convert.ToDateTime(Console.ReadLine());
+            try
+            {
+                obj = Convert.ToDateTime(Console.ReadLine());
+            }
+            catch (System.FormatException)
+            {
+                Console.WriteLine("Вы ввели неправильный тип.");
+            }
+            
 
             Console.WriteLine($"Имя: {name}\n" +
                 $"Возраст: {age}\n" +
                 $"Вес: {weight}\n" +
                 $"Рост: {height}\n" +
-                $"Женаты: {isMarried}\n" +
+                $"Женаты: {isStudent}\n" +
                 $"Дата: {obj}");
         }
     }
