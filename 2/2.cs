@@ -77,7 +77,7 @@ namespace _2
                 $"Возраст: {age}\n" +
                 $"Вес: {weight}\n" +
                 $"Рост: {height}\n" +
-                $"Женаты: {isStudent}\n" +
+                $"Студент: {isStudent}\n" +
                 $"Дата: {obj}");
         }
     }
