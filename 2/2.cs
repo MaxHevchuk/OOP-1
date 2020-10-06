@@ -10,7 +10,7 @@ namespace _2
             Console.OutputEncoding = System.Text.Encoding.Unicode;
 
             int age = 0;
-            float weight =0.0f;
+            float weight = 0.0f;
             double height = 0.0;
             bool isStudent = true;
             object obj = "";
@@ -25,7 +25,7 @@ namespace _2
             }
             catch (System.FormatException)
             {
-                Console.WriteLine("Вы ввели неправильный тип.");
+                Console.WriteLine("Вы ввели неправильный тип.\n");
             }
             
 
@@ -36,7 +36,7 @@ namespace _2
             }
             catch (System.FormatException)
             {
-                Console.WriteLine("Вы ввели неправильный тип.");
+                Console.WriteLine("Вы ввели неправильный тип.\n");
             }
             
 
@@ -47,7 +47,7 @@ namespace _2
             }
             catch (System.FormatException)
             {
-                Console.WriteLine("Вы ввели неправильный тип.");
+                Console.WriteLine("Вы ввели неправильный тип.\n");
             }
             
 
@@ -58,7 +58,7 @@ namespace _2
             }
             catch (System.FormatException)
             {
-                Console.WriteLine("Вы ввели неправильный тип.");
+                Console.WriteLine("Вы ввели неправильный тип.\n");
             }
             
 
@@ -69,16 +69,16 @@ namespace _2
             }
             catch (System.FormatException)
             {
-                Console.WriteLine("Вы ввели неправильный тип.");
+                Console.WriteLine("Вы ввели неправильный тип.\n");
             }
             
 
             Console.WriteLine($"Имя: {name}\n" +
-                $"Возраст: {age}\n" +
-                $"Вес: {weight}\n" +
-                $"Рост: {height}\n" +
-                $"Студент: {isStudent}\n" +
-                $"Дата: {obj}");
+                              $"Возраст: {age}\n" +
+                              $"Вес: {weight}\n" +
+                              $"Рост: {height}\n" +
+                              $"Студент: {isStudent}\n" +
+                              $"Дата: {obj}");
         }
     }
 }

@@ -4,6 +4,12 @@ namespace _3
 {
     class Program
     {
+        /*
+        private static void tryCatch(r)
+        {
+            
+        }
+        */
         static void Main(string[] args)
         {
             Console.OutputEncoding = System.Text.Encoding.Unicode;
@@ -13,57 +19,51 @@ namespace _3
             double numberDouble = 0;
             long numberLong = 0;
 
-            bool exit = false;
-            while (!exit)
+            while (true)
             {
-                exit = true;
                 try
                 {
-                    Console.Write("Введите число #1: ");
+                    Console.Write("Введите число int: ");
                     numberInt = Convert.ToInt32(Console.ReadLine());
+                    break;
                 }
                 catch (System.FormatException)
                 {
                     Console.WriteLine("Вы ввели не верный тип данных.");
-                    exit = false;
                 }                
             }
 
-            exit = false;
-            while (!exit)
+            while (true)
             {
-                exit = true;
                 try
                 {
-                    Console.Write("Введите число #2: ");
+                    Console.Write("Введите число double: ");
                     numberDouble = Convert.ToDouble(Console.ReadLine());
+                    break;
                 }
                 catch (System.FormatException)
                 {
                     Console.WriteLine("Вы ввели не верный тип данных.");
-                    exit = false;
                 }
             }
             
-            exit = false;
-            while (!exit)
+            while (true)
             {
-                exit = true;
                 try
                 {
-                    Console.Write("Введите число #3: ");
+                    Console.Write("Введите число long: ");
                     numberLong = Convert.ToInt64(Console.ReadLine());
+                    break;
                 }
                 catch (System.FormatException)
                 {
                     Console.WriteLine("Вы ввели не верный тип данных.");
-                    exit = false;
                 }
             }
 
             Console.WriteLine($"Первое число: {numberInt}\n" +
-                $"Второе число {numberDouble}\n" +
-                $"Третье число: {numberLong}");
+                              $"Второе число {numberDouble}\n" +
+                              $"Третье число: {numberLong}");
 
         }
     }
