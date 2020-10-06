@@ -39,8 +39,6 @@ namespace _4
 
         public TimeSpan SubDate(DateTime dateValue1, DateTime dateValue2) => dateValue1.Subtract(dateValue2);
 
-        //public DateTime SumDate(DateTime dateValue1, DateTime dateValue2) => dateValue1.AddDays(dateValue2.Day).AddMonths(dateValue2)
-
         public double toDays(DateTime dateValue) => dateValue.Day + 30 * (dateValue.Month + 12 * dateValue.Year);
         public DateTime toDate(double days)
         {
@@ -49,12 +47,9 @@ namespace _4
             int day = Convert.ToInt32(days % 30);
             return new DateTime(day, month, year);
         }
-
-
-
-
-
     }
+
+
     class Program
     {
         static void Main(string[] args)
