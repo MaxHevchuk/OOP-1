@@ -14,10 +14,17 @@ namespace _4
                 this.date = new DateTime(y, m, d);
                 return 1;
             }
-            else { Console.WriteLine("Неверная дата."); return -1; }
+            else
+            {
+                Console.WriteLine("Неверная дата.");
+                return -1;
+            }
         }
 
-        public DateTime GetDate() => date;
+        public DateTime GetDate()
+        {
+            return date;
+        }
 
         public string SubDate(DateTime dateValue1, DateTime dateValue2)
         {
