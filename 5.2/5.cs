@@ -8,14 +8,14 @@ namespace _5
     {
         static void Main(string[] args)
         {
-            string pathX = @"C:\Users\maxhe\source\repos\OOP\5\src\x.txt";
-            string pathY = @"C:\Users\maxhe\source\repos\OOP\5\src\y.txt";
-            string pathZ = @"C:\Users\maxhe\source\repos\OOP\5\src\z.txt";
+            string pathX = @"C:\Users\maxhe\source\repos\OOP\5.2\src\x.txt";
+            string pathY = @"C:\Users\maxhe\source\repos\OOP\5.2\src\y.txt";
+            string pathZ = @"C:\Users\maxhe\source\repos\OOP\5.2\src\z.txt";
 
 
             Console.Write("Введите количество элементов массива: ");
             int n = 0;
-            try { n = (int)Console.Read(); }
+            try { n = Convert.ToInt32(Console.ReadLine()); }
             catch (Exception e) { Console.WriteLine(e.Message); }
 
             int[] X = new int[n];
@@ -23,8 +23,8 @@ namespace _5
             Random rand = new Random();
             for (int i = 0; i < n; i++)
             {
-                X[i] = rand.Next(-100, 100);
-                Y[i] = rand.Next(-100, 100);
+                X[i] = rand.Next(-50, 50);
+                Y[i] = rand.Next(-50, 50);
             }
             File.WriteAllText(pathX, string.Empty);
             File.WriteAllText(pathX, string.Join(" ", X));
@@ -39,7 +39,7 @@ namespace _5
             {
                 x = File.ReadAllText(pathX).ToString().Split(new char[] { ' ' },
             StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToArray();
-                y = File.ReadAllText(pathX).ToString().Split(new char[] { ' ' },
+                y = File.ReadAllText(pathY).ToString().Split(new char[] { ' ' },
                 StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToArray();
             }
             catch (Exception e)
@@ -48,10 +48,9 @@ namespace _5
             }
 
 
-
             for (int i = 0; i < n; i++)
             {
-                x[i] = (x[i] < 0) ? (int)Math.Pow(x[i], 2) : x[i];
+                x[i] = (x[i] < 0) ? x[i]*x[i] : x[i];
 
                 z[i] = x[i] + y[i];
             }
