@@ -16,7 +16,7 @@ namespace _5
             Console.Write("Введите количество элементов массива: ");
             int n = 0;
             try { n = Convert.ToInt32(Console.ReadLine()); }
-            catch (Exception e) { Console.WriteLine(e.Message); }
+            catch (FormatException e) { Console.WriteLine(e.Message); }
 
             int[] X = new int[n];
             int[] Y = new int[n];
@@ -27,8 +27,8 @@ namespace _5
                 Y[i] = rand.Next(-50, 50);
             }
             File.WriteAllText(pathX, string.Empty);
-            File.WriteAllText(pathX, string.Join(" ", X));
             File.WriteAllText(pathY, string.Empty);
+            File.WriteAllText(pathX, string.Join(" ", X));
             File.WriteAllText(pathY, string.Join(" ", Y));
 
 
@@ -42,10 +42,7 @@ namespace _5
                 y = File.ReadAllText(pathY).ToString().Split(new char[] { ' ' },
                 StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToArray();
             }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-            }
+            catch (Exception e) { Console.WriteLine(e.Message); }
 
 
             for (int i = 0; i < n; i++)
