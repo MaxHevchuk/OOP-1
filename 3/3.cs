@@ -30,7 +30,7 @@ namespace _3
                 catch (System.FormatException)
                 {
                     Console.WriteLine("Вы ввели не верный тип данных.");
-                }                
+                }
             }
 
             while (true)
@@ -46,7 +46,7 @@ namespace _3
                     Console.WriteLine("Вы ввели не верный тип данных.");
                 }
             }
-            
+
             while (true)
             {
                 try

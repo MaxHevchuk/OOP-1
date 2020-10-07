@@ -16,8 +16,8 @@ namespace _2
             object obj = "";
 
             Console.Write("Введите имя: ");
-            string name = Console.ReadLine();            
-                 
+            string name = Console.ReadLine();
+
             Console.Write("Введите возраст: ");
             try
             {
@@ -27,7 +27,7 @@ namespace _2
             {
                 Console.WriteLine("Вы ввели неправильный тип.\n");
             }
-            
+
 
             Console.Write("Введите вес: ");
             try
@@ -38,7 +38,7 @@ namespace _2
             {
                 Console.WriteLine("Вы ввели неправильный тип.\n");
             }
-            
+
 
             Console.Write("Введите рост: ");
             try
@@ -49,7 +49,7 @@ namespace _2
             {
                 Console.WriteLine("Вы ввели неправильный тип.\n");
             }
-            
+
 
             Console.Write("Вы студент? true or false: ");
             try
@@ -60,7 +60,7 @@ namespace _2
             {
                 Console.WriteLine("Вы ввели неправильный тип.\n");
             }
-            
+
 
             Console.Write("Введите дату: ");
             try
@@ -71,7 +71,7 @@ namespace _2
             {
                 Console.WriteLine("Вы ввели неправильный тип.\n");
             }
-            
+
 
             Console.WriteLine($"Имя: {name}\n" +
                               $"Возраст: {age}\n" +
