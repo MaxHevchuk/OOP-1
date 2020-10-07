@@ -50,7 +50,7 @@ namespace _5
 
             for (int i = 0; i < n; i++)
             {
-                x[i] = (x[i] < 0) ? x[i]*x[i] : x[i];
+                x[i] = (x[i] < 0) ? x[i] * x[i] : x[i];
 
                 z[i] = x[i] + y[i];
             }
