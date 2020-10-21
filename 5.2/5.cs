@@ -15,9 +15,10 @@ namespace _5
                 {
                     array[i] = Convert.ToDouble(text[i]);
                 }
-                catch (InvalidCastException e)
+                catch (FormatException e)
                 {
                     Console.WriteLine(e.Message);
+                    System.Diagnostics.Process.GetCurrentProcess().Kill();
                 }
             }
             return array;
@@ -36,9 +37,8 @@ namespace _5
         }
         static void Main(string[] args)
         {
-            string pathX = @"C:\Users\maxhe\source\repos\OOP\5.2\src\x.txt";
-            string pathY = @"C:\Users\maxhe\source\repos\OOP\5.2\src\y.txt";
-            string pathZ = @"C:\Users\maxhe\source\repos\OOP\5.2\src\z.txt";
+            string pathX = @"..\..\..\src\x.txt";
+            string pathY = @"..\..\..\src\y.txt";
 
             double[] x = ReadFileAndGetIntArray(pathX);
             double[] y = ReadFileAndGetIntArray(pathY);
