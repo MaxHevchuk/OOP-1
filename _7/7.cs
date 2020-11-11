@@ -1,35 +1,4 @@
-﻿/*
-        Використовуючи  enum  та  масиви  вирішіть  задачу  про  стан  погоди  в минулому році. Тип погоди за день
-    повинен мати наступні можливі значення (enum): 
- * не визначено (не було внесена інформація) = 1;
- * дощ = 2;
- * короткочасний дощ = 3;
- * гроза = 4;
- * сніг = 5;
- * туман = 6;
- * похмуро = 7;
- * сонячно = 8;
-        Інформація про погоду за день повинна зберігатися  в  об’єкті  класа  WeatherParametersDay
- та  містить  наступну інформацію:
- * середня температура вдень;
- * середня температура вночі;
- * середній атмосферний тиск;
- * кількість опадів (мм/день);
- * тип погоди за день.
-        Інформація про погоду за період повинна зберігатися в об’єкті класа WeatherDays та повинна містити масив об’єктів
-    класа WeatherParametersDay в кількості (кількість днів в відповідному місяці), що відповідає варіанту. Дані повинні
-    зчитуватися  з  файлу  або  вводитися  з  клавіатури.  Інформацію  яку необхідно додатково знайти вказано в 
-    індивідуальному варіанті.  
- 
-    3) Розглядати квітень місяць, розрахувати:
- * кількість туманних днів у місяці;
- * загальну кількість днів коли був дощ або гроза;
- * середній атмосферний тиск за місяць
-
- */
-
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.IO;
 using System.Linq;
 
@@ -37,26 +6,25 @@ namespace _7
 {
     class Variables
     {
-        public static int DaysInMonth = 30;
+        public static int DAYS_IN_MONTH = 2;
+        public static bool RANDOM = false;
     }
 
     enum TypeOfWeather
     {
-        NotDefined = 1,
-        Rain = 2, // **
-        ShortTermRain = 3,
-        Thunderstorm = 4, // **
-        Snow = 5,
-        Fog = 6, // *
-        Gloomy = 7,
-        Sunny = 8
+        NotDefined = 0,
+        Rain = 1, // **
+        ShortTermRain = 2,
+        Thunderstorm = 3, // **
+        Snow = 4,
+        Fog = 5, // *
+        Gloomy = 6,
+        Sunny = 7
     }
 
     class WeatherDays
     {
         private WeatherParametersDay[] dataWeatherArray;
-
-        public WeatherParametersDay[] DataWeatherArray { get; }
 
         public WeatherDays(WeatherParametersDay[] dataWeatherArray)
         {
@@ -78,8 +46,7 @@ namespace _7
             int counter = 0;
             foreach (WeatherParametersDay day in dataWeatherArray)
             {
-                TypeOfWeather weather = (TypeOfWeather) (int) day.InfoForTheDay["typeOfWeather"];
-                counter += (typeOfWeather.Contains(weather)) ? 1 : 0;
+                counter += (typeOfWeather.Contains(day.TypeOfWeather)) ? 1 : 0;
             }
 
             return counter;
@@ -90,7 +57,7 @@ namespace _7
             double sumPressure = 0;
             foreach (WeatherParametersDay day in dataWeatherArray)
             {
-                sumPressure += day.InfoForTheDay["averageAtmosphericPressure"];
+                sumPressure += day.AverageAtmosphericPressure;
             }
 
             return sumPressure / dataWeatherArray.Length;
@@ -105,31 +72,50 @@ namespace _7
             averageAtmosphericPressure,
             precipitation;
 
-        private double typeOfWeather;
-        private Dictionary<string, double> infoForTheDay;
-        public Dictionary<string, double> InfoForTheDay { get; private set; }
+        private TypeOfWeather typeOfWeather;
+
+        public double AverageTemperatureDay
+        {
+            get => averageTemperatureDay;
+            private set => averageTemperatureDay = value;
+        }
+
+        public double AverageTemperatureNight
+        {
+            get => averageTemperatureNight;
+            private set => averageTemperatureNight = value;
+        }
+
+        public double AverageAtmosphericPressure
+        {
+            get => averageAtmosphericPressure;
+            private set => averageAtmosphericPressure = value;
+        }
+
+        public double Precipitation
+        {
+            get => precipitation;
+            private set => precipitation = value;
+        }
+
+        public TypeOfWeather TypeOfWeather
+        {
+            get => typeOfWeather;
+            private set => typeOfWeather = value;
+        }
 
         public WeatherParametersDay(double averageTemperatureDay, double averageTemperatureNight,
-            double averageAtmosphericPressure, double precipitation, double typeOfWeather)
+            double averageAtmosphericPressure, double precipitation, int typeOfWeather)
         {
             if (precipitation >= 0 &&
                 averageAtmosphericPressure >= 0 &&
-                Enumerable.Range(1, 8).Contains((int) typeOfWeather))
+                Enumerable.Range(0, 7).Contains(typeOfWeather))
             {
-                this.averageTemperatureDay = averageTemperatureDay;
-                this.averageTemperatureNight = averageTemperatureNight;
-                this.averageAtmosphericPressure = averageAtmosphericPressure;
-                this.precipitation = precipitation;
-                this.typeOfWeather = typeOfWeather;
-
-                InfoForTheDay = new Dictionary<string, double>()
-                {
-                    ["averageTemperatureDay"] = this.averageTemperatureDay,
-                    ["averageTemperatureNight"] = this.averageTemperatureNight,
-                    ["averageAtmosphericPressure"] = this.averageAtmosphericPressure,
-                    ["precipitation"] = this.precipitation,
-                    ["typeOfWeather"] = this.typeOfWeather
-                };
+                AverageTemperatureDay = averageTemperatureDay;
+                AverageTemperatureNight = averageTemperatureNight;
+                AverageAtmosphericPressure = averageAtmosphericPressure;
+                Precipitation = precipitation;
+                TypeOfWeather = (TypeOfWeather) typeOfWeather;
             }
         }
     }
@@ -138,7 +124,7 @@ namespace _7
     {
         private static double[][] DataInput(string path)
         {
-            string[] lines = new string[Variables.DaysInMonth];
+            string[] lines = new string[Variables.DAYS_IN_MONTH];
 
             bool exit = false;
             while (!exit)
@@ -167,15 +153,17 @@ namespace _7
         private static void ReadConsole(out string[] lines)
         {
             Console.WriteLine("\nВведите данные для каждого дня в отдельной строке через пробел");
-            lines = new string[Variables.DaysInMonth];
+            lines = new string[Variables.DAYS_IN_MONTH];
 
-            for (int j = 0; j < Variables.DaysInMonth; j++)
+            for (int j = 0; j < Variables.DAYS_IN_MONTH; j++)
             {
                 while (true)
                 {
+                    lines[j] = Console.ReadLine();
                     try
                     {
-                        lines[j] = Console.ReadLine();
+                        if (lines[j].Equals(""))
+                            throw new NullReferenceException();
                         break;
                     }
                     catch (NullReferenceException ex)
@@ -195,12 +183,16 @@ namespace _7
 
         private static double[][] StringToDoubleArray(string[] lines)
         {
-            // string [] {"1", "2", "3"} -> Dictionary<string, double>[] {"abc":1, "def":2, "ghk":3}
             double[][] data = new double[lines.Length][];
             for (int i = 0; i < lines.Length; i++)
             {
                 string[] linesSplit = lines[i].Split();
-                data[i] = new double[linesSplit.Length];
+                if (linesSplit.Length == 4)
+                    data[i] = new double[linesSplit.Length + 1];
+                else
+                    data[i] = new double[linesSplit.Length];
+
+
                 for (int j = 0; j < linesSplit.Length; j++)
                 {
                     double num = 0;
@@ -224,8 +216,8 @@ namespace _7
         static void Main()
         {
             string path = @"..\..\..\src\data.txt";
-            //сгенерировать рандомные данные в файле
-            //GenerateDataInFile.Run();
+            if (Variables.RANDOM)
+                GenerateDataInFile.Run();
             double[][] data = DataInput(path);
 
             WeatherParametersDay[] weatherParametersDays = new WeatherParametersDay[data.Length];
@@ -235,7 +227,7 @@ namespace _7
                     data[i][1],
                     data[i][2],
                     data[i][3],
-                    data[i][4]);
+                    (int) data[i][4]);
             }
 
             WeatherDays weatherDays = new WeatherDays(weatherParametersDays);
