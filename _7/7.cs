@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace _7
 {
-    class Variables
+    static class Variables
     {
         public static int DAYS_IN_MONTH = 30;
         public static bool RANDOM = false;
