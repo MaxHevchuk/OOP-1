@@ -31,12 +31,13 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace _7
 {
     class Variables
     {
-        public static int DaysInMonth = 2;
+        public static int DaysInMonth = 30;
     }
 
     enum TypeOfWeather
@@ -53,7 +54,47 @@ namespace _7
 
     class WeatherDays
     {
-        private double[][] dataWeatherArray = new double[Variables.DaysInMonth][];
+        private WeatherParametersDay[] dataWeatherArray;
+
+        public WeatherParametersDay[] DataWeatherArray { get; }
+
+        public WeatherDays(WeatherParametersDay[] dataWeatherArray)
+        {
+            this.dataWeatherArray = dataWeatherArray;
+        }
+
+        public int CountRainOrThunderstormDays()
+        {
+            return CountDays(TypeOfWeather.Rain, TypeOfWeather.Thunderstorm);
+        }
+
+        public int CountFogDays()
+        {
+            return CountDays(TypeOfWeather.Fog);
+        }
+
+        private int CountDays(params TypeOfWeather[] typeOfWeather)
+        {
+            int counter = 0;
+            foreach (WeatherParametersDay day in dataWeatherArray)
+            {
+                TypeOfWeather weather = (TypeOfWeather) (int) day.InfoForTheDay["typeOfWeather"];
+                counter += (typeOfWeather.Contains(weather)) ? 1 : 0;
+            }
+
+            return counter;
+        }
+
+        public double AveragePressure()
+        {
+            double sumPressure = 0;
+            foreach (WeatherParametersDay day in dataWeatherArray)
+            {
+                sumPressure += day.InfoForTheDay["averageAtmosphericPressure"];
+            }
+
+            return sumPressure / dataWeatherArray.Length;
+        }
     }
 
     class WeatherParametersDay
@@ -64,15 +105,40 @@ namespace _7
             averageAtmosphericPressure,
             precipitation;
 
-        private int typeOfWeather;
+        private double typeOfWeather;
+        private Dictionary<string, double> infoForTheDay;
+        public Dictionary<string, double> InfoForTheDay { get; private set; }
+
+        public WeatherParametersDay(double averageTemperatureDay, double averageTemperatureNight,
+            double averageAtmosphericPressure, double precipitation, double typeOfWeather)
+        {
+            if (precipitation >= 0 &&
+                averageAtmosphericPressure >= 0 &&
+                Enumerable.Range(1, 8).Contains((int) typeOfWeather))
+            {
+                this.averageTemperatureDay = averageTemperatureDay;
+                this.averageTemperatureNight = averageTemperatureNight;
+                this.averageAtmosphericPressure = averageAtmosphericPressure;
+                this.precipitation = precipitation;
+                this.typeOfWeather = typeOfWeather;
+
+                InfoForTheDay = new Dictionary<string, double>()
+                {
+                    ["averageTemperatureDay"] = this.averageTemperatureDay,
+                    ["averageTemperatureNight"] = this.averageTemperatureNight,
+                    ["averageAtmosphericPressure"] = this.averageAtmosphericPressure,
+                    ["precipitation"] = this.precipitation,
+                    ["typeOfWeather"] = this.typeOfWeather
+                };
+            }
+        }
     }
 
     class Program
     {
-        private static Dictionary<string, double>[] Data(string path)
+        private static double[][] DataInput(string path)
         {
-            double[][] dataDays = new double[Variables.DaysInMonth][];
-            string[] lines = { };
+            string[] lines = new string[Variables.DaysInMonth];
 
             bool exit = false;
             while (!exit)
@@ -93,29 +159,7 @@ namespace _7
                 }
             }
 
-            Dictionary<string, double>[] dictArray = DictArray(lines);
-
-
-            // for (int line = 0; line < lines.Length; line++)
-            // {
-            //     string[] lineSplit = lines[line].Split();
-            //     dataDays[line] = new double[lines[line].Length];
-            //
-            //     for (int index = 0; index < lineSplit.Length; index++)
-            //     {
-            //         try
-            //         {
-            //             dataDays[line][index] = Convert.ToDouble(lineSplit[index]);
-            //         }
-            //         catch (Exception ex) when (ex is InvalidCastException || ex is FormatException)
-            //         {
-            //             Console.WriteLine(ex.Message);
-            //             System.Diagnostics.Process.GetCurrentProcess().Kill();
-            //         }
-            //     }
-            // }
-
-            return dictArray;
+            return StringToDoubleArray(lines);
         }
 
         private static string[] ReadFile(string path) => File.ReadAllLines(path);
@@ -149,21 +193,14 @@ namespace _7
             return Console.ReadKey().Key;
         }
 
-        private static Dictionary<string, double>[] DictArray(string[] lines)
+        private static double[][] StringToDoubleArray(string[] lines)
         {
-            // string [] {"1", "2", "3"} -> Dictionary<string, double> {"abc":1, "def":2, "ghk":3}
-            Dictionary<string, double>[] dictArray = new Dictionary<string, double>[Variables.DaysInMonth]; 
-            string[] stringKeys =
-            {
-                "averageTemperatureDay",
-                "averageTemperatureNight",
-                "averageAtmosphericPressure",
-                "precipitation"
-            };
+            // string [] {"1", "2", "3"} -> Dictionary<string, double>[] {"abc":1, "def":2, "ghk":3}
+            double[][] data = new double[lines.Length][];
             for (int i = 0; i < lines.Length; i++)
             {
                 string[] linesSplit = lines[i].Split();
-                dictArray[i] = new Dictionary<string, double>();
+                data[i] = new double[linesSplit.Length];
                 for (int j = 0; j < linesSplit.Length; j++)
                 {
                     double num = 0;
@@ -176,18 +213,36 @@ namespace _7
                         Console.WriteLine(ex.Message);
                         System.Diagnostics.Process.GetCurrentProcess().Kill();
                     }
-                    dictArray[i].Add(stringKeys[j], num);
-                }   
+
+                    data[i][j] = num;
+                }
             }
 
-            return dictArray;
+            return data;
         }
 
         static void Main()
         {
             string path = @"..\..\..\src\data.txt";
-            Dictionary<string, double>[] data = Data(path);
-            Console.WriteLine(data);
+            //сгенерировать рандомные данные в файле
+            //GenerateDataInFile.Run();
+            double[][] data = DataInput(path);
+
+            WeatherParametersDay[] weatherParametersDays = new WeatherParametersDay[data.Length];
+            for (int i = 0; i < data.Length; i++)
+            {
+                weatherParametersDays[i] = new WeatherParametersDay(data[i][0],
+                    data[i][1],
+                    data[i][2],
+                    data[i][3],
+                    data[i][4]);
+            }
+
+            WeatherDays weatherDays = new WeatherDays(weatherParametersDays);
+            Console.WriteLine($"\nКоличество туманных дней: {weatherDays.CountFogDays()}");
+            Console.WriteLine(
+                $"Количество дней, когда был дождь или гроза: {weatherDays.CountRainOrThunderstormDays()}");
+            Console.WriteLine($"Среднее атмосферное давление за месяц: {weatherDays.AveragePressure()}");
         }
     }
 }
