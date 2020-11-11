@@ -4,132 +4,74 @@ using System.Linq;
 
 namespace _6
 {
-    class Arrays
+    class Array
     {
-        private int rows;
-        private int columns;
-        private int[,] array;
+        private int row, column;
+        private int[][] array;
 
-
-        public string Array => String.Join(" ", array.Cast<int>());
-
-        public Arrays(int m, int n)
+        public Array(int row, int column)
         {
-            if (m >= 0 && n >= 0 && m == n)
-            {
-                this.rows = m;
-                this.columns = n;
-
-                GenerateArray(ref array);
-            }
-            else
-            {
-                Console.WriteLine("Числа не должны быть меньше нуля и они должны быть равными");
-                System.Diagnostics.Process.GetCurrentProcess().Kill();
-            }
+            this.row = row;
+            this.column = column;
+            array = new int[row][];
         }
 
-        private void GenerateArray(ref int[,] arr)
+        public int[][] GenerateArray()
         {
-            arr = new int[rows, columns];
-            var random = new Random();
-            for (int line = 0; line < rows; line++)
+            Random random = new Random();
+            for (int line = 0; line < row; line++)
             {
-                for (int element = 0; element < columns; element++)
-                {
-                    arr[line, element] = random.Next(1, 41);
-                }
+                array[line] = new int[column];
+                for (int element = 0; element < column; element++)
+                    array[line][element] = random.Next(1, 41);
             }
+
+            return array;
         }
 
-        public List<int> FindElement(int key)
+        public Dictionary<int, List<int[]>> FindKey(int key)
         {
-            List<int> result = new List<int>();
-            for (int line = 0; line < rows; line++)
+            List<int[]> indexes = new List<int[]>();
+            Dictionary<int, List<int[]>> dict = new Dictionary<int, List<int[]>>();
+            for (int line = 0; line < row; line++)
             {
-                for (int element = 0; element < columns; element++)
+                for (int element = 0; element < column; element++)
                 {
-                    if (array[line, element].Equals(key))
+                    if (array[line][element] == key)
                     {
-                        result.Add(array[line, element]);
+                        indexes.Add(new int[2]{line, element});
                     }
                 }
             }
-
-            return result;
+            dict.Add(key, indexes);
+            return dict;
         }
 
-        public Dictionary<int, int[]> GetMinInEachLine()
+        public Dictionary<int, Dictionary<int, int>> FindMinElementInLine()
         {
-            Dictionary<int, int[]> result = new Dictionary<int, int[]>();
-            int min = Int32.MaxValue;
-            // int[] index = { };
-            int line_index = 0;
-            int elem_index = 0;
-
-            for (int line = 0; line < rows; line++)
+            Dictionary<int, Dictionary<int, int>> dict = new Dictionary<int, Dictionary<int, int>>();
+            for (int line = 0; line < row; line++)
             {
-                for (int element = 0; element < columns; element++)
-                {
-                    if (min > array[line, element])
-                    {
-                        min = array[line, element];
-                        line_index = line;
-                        elem_index = element;
-                        // index = new[] {line, element};
-                    }
-                }
+                int minElem = array[line].Min();
+                Dictionary<int, int> dictInDict =
+                        new Dictionary<int, int>()
+                        {
+                            [minElem] = System.Array.IndexOf(array, minElem)
+                        }
+                    ;
 
-                result.Add(line_index, new[] {min, elem_index});
-                min = Int32.MaxValue;
+                dict.Add(line, dictInDict);
             }
 
-            return result;
+            return dict;
         }
     }
 
     class Program
     {
-        private void TryCatch(ref int num)
-        {
-            try
-            {
-                num = Convert.ToInt32(Console.Read());
-            }
-            catch (InvalidCastException e)
-            {
-                Console.WriteLine(e.Message);
-                System.Diagnostics.Process.GetCurrentProcess().Kill();
-            }
-        }
-
         static void Main()
         {
-            int m = 0;
-            int n = 0;
-            int key = 1;
-
-            try
-            {
-                Console.Write("Введите число m: ");
-                m = Convert.ToInt32(Console.Read());
-                Console.Write("Введите число n: ");
-                n = Convert.ToInt32(Console.Read());
-                Console.WriteLine("Введите ключ: ");
-                key = Convert.ToInt32(Console.Read());
-            }
-            catch (InvalidCastException e)
-            {
-                Console.WriteLine(e.Message);
-                System.Diagnostics.Process.GetCurrentProcess().Kill();
-            }
-
-            Arrays arrayObj = new Arrays(3, 3);
-            Console.WriteLine(arrayObj.Array);
-            List<int> list_arr = arrayObj.FindElement(key);
-            list_arr.ForEach(i => Console.Write("{0}\t", i));
-            Dictionary<int, int[]> dict = arrayObj.GetMinInEachLine();
-            dict.Select(i => $"{i.Key}: {i.Value}").ToList().ForEach(Console.WriteLine);
+            Console.WriteLine("");
         }
     }
 }
