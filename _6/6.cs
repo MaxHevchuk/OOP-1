@@ -11,9 +11,12 @@ namespace _6
 
         public Arrays(int row, int column)
         {
-            this.row = row;
-            this.column = column;
-            array = new int[row][];
+            if (row > 0 && column > 0)
+            {
+                this.row = row;
+                this.column = column;
+                array = new int[row][];
+            }
         }
 
         public void GenerateArray()
@@ -29,6 +32,11 @@ namespace _6
 
         public Dictionary<int, List<int[]>> FindKey(int key)
         {
+            // [[2, 1, 1]
+            //  [3, 4, 5]
+            //  [1, 7, 8]]
+            // dict(key, list(index[])) ==> dict(1, list([0, 1], [0, 2], [2, 0]))
+
             List<int[]> indexes = new List<int[]>();
             Dictionary<int, List<int[]>> dict = new Dictionary<int, List<int[]>>();
             for (int line = 0; line < row; line++)
@@ -37,27 +45,31 @@ namespace _6
                 {
                     if (array[line][element] == key)
                     {
-                        indexes.Add(new int[2] {line, element});
+                        indexes.Add(new[] {line, element});
                     }
                 }
             }
 
-            dict.Add(key, indexes);
+            if (indexes.Count > 0)
+            {
+                dict.Add(key, indexes);
+            }
+
             return dict;
         }
 
-        public Dictionary<int, Dictionary<int, int>> FindMinElementInLine()
+        public Dictionary<string, int>[] FindMinElementInLine()
         {
-            Dictionary<int, Dictionary<int, int>> dict = new Dictionary<int, Dictionary<int, int>>();
+            Dictionary<string, int>[] dict = new Dictionary<string, int>[array.Length];
             for (int line = 0; line < row; line++)
             {
                 int minElem = array[line].Min();
-                Dictionary<int, int> dictInDict = new Dictionary<int, int>()
+                dict[line] = new Dictionary<string, int>()
                 {
-                    [minElem] = System.Array.IndexOf(array, minElem)
+                    ["minElement"] = minElem,
+                    ["row"] = line,
+                    ["column"] = Array.IndexOf(array[line], minElem)
                 };
-
-                dict.Add(line, dictInDict);
             }
 
             return dict;
@@ -75,7 +87,7 @@ namespace _6
                     result[line][elem] = Convert.ToString(array[line][elem]);
                 }
 
-                arrayOfStrings[line] = String.Join(" ", result[line]);
+                arrayOfStrings[line] = "|" + String.Join(" ", result[line]) + "|";
             }
 
             return String.Join("\n", arrayOfStrings);
@@ -84,11 +96,73 @@ namespace _6
 
     class Program
     {
+        static int ReadConsole(string word)
+        {
+            int num;
+            while (true)
+            {
+                try
+                {
+                    Console.Write($"Введите число {word}: ");
+                    num = Convert.ToInt32(Console.ReadLine());
+                    break;
+                }
+                catch (Exception ex) when (ex is FormatException || ex is InvalidCastException)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            }
+
+            return num;
+        }
+
+        static void WriteFuncFindKey(Dictionary<int, List<int[]>> funcFindKey)
+        {
+            if (funcFindKey.Count > 0)
+            {
+                foreach (int key in funcFindKey.Keys)
+                {
+                    Console.WriteLine($"\nkey = {key}");
+                    Console.WriteLine("indexes = \n{");
+                    for (int i = 0; i < funcFindKey[key].Count; i++)
+                    {
+                        Console.WriteLine(string.Join(" ", funcFindKey[key][i]));
+                    }
+
+                    Console.WriteLine("}");
+                }
+            }
+            else
+            {
+                Console.WriteLine("Не найдено ни одного ключа");
+            }
+        }
+
+        static void WriteFuncFindMinElemInLine(Dictionary<string, int>[] funcFindMinElemInLine)
+        {
+            Console.Write("\n{");
+            foreach (Dictionary<string, int> dict in funcFindMinElemInLine)
+            {
+                foreach (string key in dict.Keys)
+                {
+                    Console.WriteLine($"{key} = {dict[key]}");
+                }
+
+                Console.WriteLine("\n");
+            }
+
+            Console.Write("}");
+        }
+
         static void Main()
         {
-            Arrays array = new Arrays(3, 3);
+            Arrays array = new Arrays(ReadConsole("m"), ReadConsole("n"));
+            int key = ReadConsole("key");
+
             array.GenerateArray();
             Console.WriteLine(array.ToString());
+            WriteFuncFindKey(array.FindKey(key));
+            WriteFuncFindMinElemInLine(array.FindMinElementInLine());
         }
     }
 }
