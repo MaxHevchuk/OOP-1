@@ -37,7 +37,8 @@ namespace _8
 
         public static MyComplex operator +(double a, MyComplex b)
         {
-            return new MyComplex(a + b._re, b._im);
+            // return new MyComplex(a + b._re, b._im);
+            return b + a;
         }
 
         public static MyComplex operator -(MyComplex a)
@@ -45,9 +46,9 @@ namespace _8
             return new MyComplex(-a._re, -a._im);
         }
 
-        public static MyComplex operator *(MyComplex a, MyComplex B)
+        public static MyComplex operator *(MyComplex a, MyComplex b)
         {
-            return new MyComplex(a._re + B._re, a._im + B._im);
+            return new MyComplex(a._re + b._re, a._im + b._im);
         }
 
         public void InputFromTerminal()
